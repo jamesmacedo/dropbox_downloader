@@ -2,12 +2,13 @@
 
 A Python-based tool for downloading files from Dropbox. This script allows you to list folders, authenticate with your Dropbox account, and download files to a local directory.
 
-```bash
-    Disclaimer:
+---
 
-    This code was based in the following GIST: [GOTO](https://gist.github.com/hannesdatta/10422a6fbb584f245c83361245335741) 
-    Thanks to [hannesdatta](https://github.com/hannesdatta)!
-```
+Disclaimer:
+
+This code was based in the following GIST: [GOTO](https://gist.github.com/hannesdatta/10422a6fbb584f245c83361245335741)
+
+Huge thanks to [hannesdatta](https://github.com/hannesdatta)
 
 ## Requirements
 
