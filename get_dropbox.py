@@ -69,9 +69,7 @@ def get_files(dbx, folder_id, download_dir):
             os.makedirs(os.path.dirname(os.path.abspath(path)))
         except:
             1+1
-        print(path)
-        dbx.files_download_to_file(path, fn)
-    
+        dbx.files_download_to_file(path, fn) 
 
 # auxilary function to print iterations progress (from https://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console)
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█'):
