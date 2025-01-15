@@ -9,7 +9,6 @@ import dropbox
 import os
 import shutil
 
-
 # Find folder ID
 def get_folders(dbx, folder):
     result = dbx.files_list_folder(folder, recursive=True)
@@ -39,29 +38,39 @@ def wipe_dir(download_dir):
 def get_files(dbx, folder_id, download_dir):
     assert(folder_id.startswith('id:'))
     result = dbx.files_list_folder(folder_id, recursive=True)
-    
+ 
     # determine highest common directory
     assert(result.entries[0].id==folder_id)
     common_dir = result.entries[0].path_lower
-    
+
     file_list = []
-    
+
     def process_entries(entries):
         for entry in entries:
             if isinstance(entry, dropbox.files.FileMetadata):
                 file_list.append(entry.path_lower)
-    
+
     process_entries(result.entries)
-    
+
     while result.has_more:
         result = dbx.files_list_folder_continue(result.cursor)
-    
+
         process_entries(result.entries)
-        
-         
+
+    existing_files = set()
+    for root, _, files in os.walk(download_dir):
+        for file in files:
+            relative_path = os.path.relpath(os.path.join(root, file), download_dir)
+            existing_files.add(relative_path.replace('\\', '/'))
+
     print('Downloading ' + str(len(file_list)) + ' files...')
-    i=0
+    i = 0
     for fn in file_list:
+        relative_fn = remove_prefix(fn, common_dir).lstrip('/')
+        if relative_fn in existing_files:
+            print(f"Skipping already existing file: {relative_fn}")
+            continue
+        
         i+=1
         printProgressBar(i, len(file_list))
         path = remove_suffix(download_dir, '/') + remove_prefix(fn, common_dir)
@@ -92,7 +101,6 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     if iteration == total: 
         print()
 
-
 # inspired by https://stackoverflow.com/questions/16891340/remove-a-prefix-from-a-string and 
 # https://stackoverflow.com/questions/1038824/how-do-i-remove-a-substring-from-the-end-of-a-string-in-python
         
@@ -101,5 +109,3 @@ def remove_prefix(text, prefix):
 
 def remove_suffix(text, suffix):
     return text[:-(text.endswith(suffix) and len(suffix))]
-
-
