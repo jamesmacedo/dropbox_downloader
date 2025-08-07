@@ -1,13 +1,15 @@
-# > pip install dropbox
+# > pip install dropbox pick pp-ez
 import dropbox
 import argparse
 import pp
 import os
+from pick import pick
 from helpers import find_folder_id
 from get_dropbox import get_folders, get_files
 
 parser = argparse.ArgumentParser(description="Download files from Dropbox")
 parser.add_argument('--token', type=str, help="Your Dropbox Token", required=False)
+parser.add_argument('--interactive', type=bool, help="Your Dropbox Token", default=True, required=False)
 parser.add_argument('--root', type=str, help="Target Dropbox folder", required=True)
 parser.add_argument('--list', help="List folders", action='store_true', required=False)
 parser.add_argument('--depth', help="Select a depth in the folder listing", type=int, required=False)
@@ -47,6 +49,13 @@ def to_list(array, depth=1):
 
 dbx = auth(args.token or open('token.txt').read().strip())
 folders = get_folders(dbx, args.root.lower())
+
+
+if(args.interactive is True):
+    selected, idx = pick([name for name, _ in folders], "Please select one folder")
+    found_folder = find_folder_id(folders, folders[idx][1])
+    download(found_folder, found_folder[1])
+    exit(1)
 
 if (args.list is True):
     pp(to_list(folders, args.depth))
