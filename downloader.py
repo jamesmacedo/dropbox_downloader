@@ -9,7 +9,7 @@ from get_dropbox import get_folders, get_files
 
 parser = argparse.ArgumentParser(description="Download files from Dropbox")
 parser.add_argument('--token', type=str, help="Your Dropbox Token", required=False)
-parser.add_argument('--interactive', type=bool, help="Your Dropbox Token", default=True, required=False)
+parser.add_argument('--interactive', action='store_true', help="Use the interactive mode to select the desired folder")
 parser.add_argument('--root', type=str, help="Target Dropbox folder", required=True)
 parser.add_argument('--list', help="List folders", action='store_true', required=False)
 parser.add_argument('--depth', help="Select a depth in the folder listing", type=int, required=False)
